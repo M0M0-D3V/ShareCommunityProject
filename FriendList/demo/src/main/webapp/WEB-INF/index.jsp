@@ -18,7 +18,7 @@ uri="http://www.springframework.org/tags/form" %>
     <title>Events</title>
   </head>
   <body>
-    <h1>Welcome to Events!</h1>
+    <h1>Friend List App</h1>
     <div class="row">
       <div class="col-md-6">
         <h3>Register</h3>

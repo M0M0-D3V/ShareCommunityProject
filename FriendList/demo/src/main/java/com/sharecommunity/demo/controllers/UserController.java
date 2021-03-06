@@ -26,11 +26,17 @@ public class UserController {
         this.userValidator = userValidator;
     }
 
-    // index at / is the registration and login page
+    private Long isLoggedIn(HttpSession session) {
+        if (session.getAttribute("uuid") == null) {
+            return null;
+        }
+        return (Long) session.getAttribute("uuid");
+    }
+
     @RequestMapping("/")
     public String index(@ModelAttribute("registration") User user, HttpSession session, Model model) {
-        if (session.getAttribute("uuid") != null) {
-            return "redirect:/events";
+        if (isLoggedIn(session) != null) {
+            return "redirect:/dashboard";
         } else {
             return "index.jsp";
         }
@@ -39,9 +45,6 @@ public class UserController {
     @PostMapping("/registration")
     public String registerUser(@Valid @ModelAttribute("registration") User user, BindingResult result,
             HttpSession session, Model model) {
-        // [x] validate
-        // [x] else, save the user in the database, save the user id in session, and
-        // [x] redirect them to the /home route
         System.out.println("hit the registration button and running validations now");
         userValidator.validate(user, result);
         System.out.println("ran validations and now evaluating if errors...");
@@ -54,7 +57,7 @@ public class UserController {
             System.out.println("User created successfully");
             session.setAttribute("uuid", user.getId());
             System.out.println("User ID saved to session as: " + user.getId());
-            return "redirect:/events";
+            return "redirect:/dashboard";
         }
     }
 
@@ -63,15 +66,12 @@ public class UserController {
             @RequestParam("email") String email, @RequestParam("password") String password, Model model,
             HttpSession session, RedirectAttributes redirectAttributes) {
         System.out.println("entered post request for login...");
-        // [x] if the user is authenticated, save their user id in session
         if (userService.authenticateUser(email, password)) {
             User thisUser = userService.findByEmail(email);
             session.setAttribute("uuid", thisUser.getId());
             System.out.println("User ID saved to session as: " + thisUser.getId());
-            return "redirect:/events";
-        }
-        // [x] else, add error messages and return the login page
-        else {
+            return "redirect:/dashboard";
+        } else {
             String error = "Email or Password incorrect";
             model.addAttribute("error", error);
             return "index.jsp";
@@ -80,10 +80,8 @@ public class UserController {
 
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        // [x] invalidate session
         System.out.println("Invalidating Session...");
         session.invalidate();
-        // [x] redirect to login page
         return "redirect:/";
     }
 

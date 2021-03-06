@@ -1,5 +1,7 @@
 package com.sharecommunity.demo.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.sharecommunity.demo.models.User;
@@ -39,6 +41,11 @@ public class UserService {
         }
     }
 
+    // find all other users
+    public List<User> findAllOtherUsers(Long id) {
+        return userRepository.findByIdNot(id);
+    }
+
     // authenticate user
     public boolean authenticateUser(String email, String password) {
         // first find the user by email
@@ -54,5 +61,14 @@ public class UserService {
                 return false;
             }
         }
+    }
+
+    // friend request from me to user
+    public void friendRequest(User me, User user) {
+        me.addUsersRequestedTo(user);
+        user.addRequestReceivedFrom(me);
+        System.out.println("Added both me and user to requested and received");
+        userRepository.save(me);
+        userRepository.save(user);
     }
 }

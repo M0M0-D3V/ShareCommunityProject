@@ -31,16 +31,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Size(min = 1, message = "First Name is required")
+    @Size(min = 1, message = " is required")
     private String username;
-    @Size(min = 1, message = "First Name is required")
+    @Size(min = 1, message = " is required")
     private String firstName;
-    @Size(min = 1, message = "Last Name is required")
+    @Size(min = 1, message = " is required")
     private String lastName;
-    @NotEmpty(message = "Email is required")
-    @Email(message = "Email is required")
+    @NotEmpty(message = " is required")
+    @Email(message = " is required")
     private String email;
-    @NotEmpty(message = "Contact is required")
+    @NotEmpty(message = " is required")
     private String contact;
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
@@ -80,14 +80,6 @@ public class User {
 
     @ManyToMany(mappedBy = "friends")
     private List<User> acceptedRequest;
-
-    // @JoinTable(name = "EMPLOYEE_COLLEAGUE", joinColumns = { @JoinColumn(name =
-    // "EMPLOYEE_ID") }, inverseJoinColumns = {
-    // @JoinColumn(name = "COLLEAGUE_ID") })
-    // private Set<Employee> colleagues = new HashSet<Employee>();
-
-    // @ManyToMany(mappedBy = "colleagues")
-    // private Set<Employee> teammates = new HashSet<Employee>();
 
     public User() {
 
@@ -204,6 +196,14 @@ public class User {
         this.requestsReceivedFrom = requestsReceivedFrom;
     }
 
+    public void addRequestReceivedFrom(User user) {
+        this.requestsReceivedFrom.add(user);
+    }
+
+    public void removeRequestReceivedFrom(User user) {
+        this.requestsReceivedFrom.remove(user);
+    }
+
     public User getRequestsReceiver() {
         return requestsReceiver;
     }
@@ -220,6 +220,14 @@ public class User {
         this.usersRequestedTo = usersRequestedTo;
     }
 
+    public void addUsersRequestedTo(User user) {
+        this.usersRequestedTo.add(user);
+    }
+
+    public void removeUsersRequestedTo(User user) {
+        this.usersRequestedTo.remove(user);
+    }
+
     public User getRequestSender() {
         return requestSender;
     }
@@ -234,5 +242,13 @@ public class User {
 
     public void setFriends(List<User> friends) {
         this.friends = friends;
+    }
+
+    public void addFriend(User user) {
+        this.friends.add(user);
+    }
+
+    public void removeFriend(User user) {
+        this.friends.remove(user);
     }
 }
