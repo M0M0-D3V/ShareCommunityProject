@@ -30,6 +30,11 @@ uri="http://www.springframework.org/tags/form" %>
         >
           <div class="form-group">
             <p>
+              <form:label path="username">Username:</form:label>
+              <form:errors path="username" class="errors" />
+              <form:input type="text" path="username" class="form-control" />
+            </p>
+            <p>
               <form:label path="firstName">First Name:</form:label>
               <form:errors path="firstName" class="errors" />
               <form:input type="text" path="firstName" class="form-control" />
@@ -45,20 +50,9 @@ uri="http://www.springframework.org/tags/form" %>
               <form:input type="email" path="email" class="form-control" />
             </p>
             <p>
-              <form:label path="location">Location:</form:label>
-              <form:errors path="location" class="errors" />
-              <form:input type="text" path="location" class="form-control" />
-            </p>
-            <p>
-              <form:label path="state">State</form:label>
-              <form:errors path="state" class="errors" />
-              <form:select path="state" name="state" class="form-control">
-                <c:forEach items="${states}" var="state">
-                  <form:option value="${state}"
-                    ><c:out value="${state}"></c:out
-                  ></form:option>
-                </c:forEach>
-              </form:select>
+              <form:label path="contact">Phone:</form:label>
+              <form:errors path="contact" class="errors" />
+              <form:input type="text" path="contact" class="form-control" />
             </p>
             <p>
               <form:label path="password">Password:</form:label>
