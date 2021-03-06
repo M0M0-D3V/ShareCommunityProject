@@ -222,6 +222,7 @@ public class User {
 
     public void addUsersRequestedTo(User user) {
         this.usersRequestedTo.add(user);
+        System.out.println("added " + user.getUsername() + " to " + this.getUsername() + "'s pending list");
     }
 
     public void removeUsersRequestedTo(User user) {

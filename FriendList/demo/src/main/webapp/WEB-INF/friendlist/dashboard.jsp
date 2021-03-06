@@ -68,7 +68,16 @@ uri="http://www.springframework.org/tags/form" %>
       </c:forEach>
     </table>
     <h3>Confirmed Friends</h3>
+    <c:forEach items="${me.friends}" var="friend">
+      <c:out value="${friend.username}" />
+    </c:forEach>
     <h3>Pending Requests I Sent</h3>
+    <c:forEach items="${myRequestsPending}" var="requestee">
+      <c:out value="${requestee.username}" />
+    </c:forEach>
     <h3>Requests Received From Other People</h3>
+    <c:forEach items="${me.requestsReceivedFrom}" var="requested">
+      <c:out value="${requested.username}" />
+    </c:forEach>
   </body>
 </html>

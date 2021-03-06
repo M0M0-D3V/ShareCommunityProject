@@ -1,5 +1,7 @@
 package com.sharecommunity.demo.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import com.sharecommunity.demo.models.User;
@@ -33,7 +35,10 @@ public class FriendlistController {
         if (isLoggedIn(session) == null) {
             return "redirect:/";
         }
-        model.addAttribute("me", userService.findUserById(isLoggedIn(session)));
+        User me = userService.findUserById(isLoggedIn(session));
+        List<User> myRequestsPending = me.getUsersRequestedTo();
+        model.addAttribute("me", me);
+        model.addAttribute("myRequestsPending", myRequestsPending);
         model.addAttribute("allOtherUsers", userService.findAllOtherUsers(isLoggedIn(session)));
 
         return "friendlist/dashboard.jsp";

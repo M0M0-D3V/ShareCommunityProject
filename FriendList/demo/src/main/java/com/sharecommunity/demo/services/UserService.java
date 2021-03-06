@@ -70,5 +70,9 @@ public class UserService {
         System.out.println("Added both me and user to requested and received");
         userRepository.save(me);
         userRepository.save(user);
+        List<User> myRequestedList = me.getUsersRequestedTo();
+        for (User requestee : myRequestedList) {
+            System.out.println(requestee.getUsername());
+        }
     }
 }
