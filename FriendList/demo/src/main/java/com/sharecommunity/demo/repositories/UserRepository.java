@@ -1,6 +1,6 @@
 package com.sharecommunity.demo.repositories;
 
-import java.util.List;
+import java.util.Set;
 
 import com.sharecommunity.demo.models.User;
 
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<User, Long> {
     User findByEmail(String email);
 
-    List<User> findByIdNot(Long id);
+    Set<User> findByIdNot(Long id);
 }

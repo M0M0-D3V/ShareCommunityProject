@@ -2,6 +2,7 @@ package com.sharecommunity.demo.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 import com.sharecommunity.demo.models.User;
@@ -42,7 +43,7 @@ public class UserService {
     }
 
     // find all other users
-    public List<User> findAllOtherUsers(Long id) {
+    public Set<User> findAllOtherUsers(Long id) {
         return userRepository.findByIdNot(id);
     }
 
@@ -65,12 +66,12 @@ public class UserService {
 
     // friend request from me to user
     public void friendRequest(User me, User user) {
-        me.addUsersRequestedTo(user);
-        user.addRequestReceivedFrom(me);
-        System.out.println("Added both me and user to requested and received");
+        me.addRequestsSentTo(user);
+        user.addRequestsReceivedFrom(me);
         userRepository.save(me);
         userRepository.save(user);
-        List<User> myRequestedList = me.getUsersRequestedTo();
+        System.out.println("Added both me and user to requested and received");
+        Set<User> myRequestedList = me.getRequestsSentTo();
         for (User requestee : myRequestedList) {
             System.out.println(requestee.getUsername());
         }

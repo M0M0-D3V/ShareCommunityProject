@@ -45,7 +45,7 @@ uri="http://www.springframework.org/tags/form" %>
                 >
               </td>
             </c:when>
-            <c:when test="${me.usersRequestedTo.contains(user)}">
+            <c:when test="${me.requestsSentTo.contains(user)}">
               <td>
                 Sent Requests To..<a href="/friendlist/${user.id}/cancel"
                   >Cancel</a
@@ -60,7 +60,9 @@ uri="http://www.springframework.org/tags/form" %>
             </c:when>
             <c:otherwise>
               <td>
-                <a href="/friendlist/${user.id}/request">Request Friend</a>
+                <form:form action="/friendlist/${user.id}/request" method="PUT">
+                  <button type="submit">Request Friend</button>
+                </form:form>
               </td>
             </c:otherwise>
           </c:choose>

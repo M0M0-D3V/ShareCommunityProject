@@ -1,7 +1,8 @@
 package com.sharecommunity.demo.models;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,32 +55,30 @@ public class User {
 
     // ***************FKs and JOINS****************************
 
-    // One User can receive many requests from other Users
-    @OneToMany(mappedBy = "requestsReceiver", fetch = FetchType.LAZY)
-    private List<User> requestsReceivedFrom;
+    // Many Users can receive requests from Many Users
+    @ManyToMany(mappedBy = "requestReceivers")
+    private Set<User> requestsReceivedFrom = new HashSet<User>();
 
-    // Many Requests received by One User
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private User requestsReceiver;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "user_received", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "receiver_id"))
+    private Set<User> requestReceivers = new HashSet<User>();
 
-    // One User to send many pending Requests to other Users
-    @OneToMany(mappedBy = "requestSender", fetch = FetchType.LAZY)
-    private List<User> usersRequestedTo;
+    // Many Users can send requests to Many Users
+    @ManyToMany(mappedBy = "requestSenders")
+    private Set<User> requestsSentTo = new HashSet<User>();
 
-    // Many Requests received by One User
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
-    private User requestSender;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "user_sent", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "sender_id"))
+    private Set<User> requestSenders;
 
     // Many Users can have Many Friends
-    @ManyToMany(fetch = FetchType.LAZY)
-    // @ManyToMany(cascade={CascadeType.ALL})
-    @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    private List<User> friends;
-
     @ManyToMany(mappedBy = "friends")
-    private List<User> acceptedRequest;
+    private Set<User> acceptedRequest = new HashSet<User>();
+
+    // @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private Set<User> friends = new HashSet<User>();
 
     public User() {
 
@@ -95,12 +94,11 @@ public class User {
         this.updatedAt = new Date();
     }
 
-    public User(Long id, @Size(min = 1, message = "First Name is required") String username,
-            @Size(min = 1, message = "First Name is required") String firstName,
-            @Size(min = 1, message = "Last Name is required") String lastName,
-            @Email(message = "Email is required") String email,
-            @NotEmpty(message = "Contact is required") String contact) {
-        this.id = id;
+    public User(@Size(min = 1, message = " is required") String username,
+            @Size(min = 1, message = " is required") String firstName,
+            @Size(min = 1, message = " is required") String lastName,
+            @NotEmpty(message = " is required") @Email(message = " is required") String email,
+            @NotEmpty(message = " is required") String contact) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -188,68 +186,60 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public List<User> getRequestsReceivedFrom() {
+    public Set<User> getRequestsReceivedFrom() {
         return requestsReceivedFrom;
     }
 
-    public void setRequestsReceivedFrom(List<User> requestsReceivedFrom) {
+    public void setRequestsReceivedFrom(Set<User> requestsReceivedFrom) {
         this.requestsReceivedFrom = requestsReceivedFrom;
     }
 
-    public void addRequestReceivedFrom(User user) {
+    public void addRequestsReceivedFrom(User user) {
         this.requestsReceivedFrom.add(user);
     }
 
-    public void removeRequestReceivedFrom(User user) {
-        this.requestsReceivedFrom.remove(user);
+    public Set<User> getRequestReceivers() {
+        return requestReceivers;
     }
 
-    public User getRequestsReceiver() {
-        return requestsReceiver;
+    public void setRequestReceivers(Set<User> requestReceivers) {
+        this.requestReceivers = requestReceivers;
     }
 
-    public void setRequestsReceiver(User requestsReceiver) {
-        this.requestsReceiver = requestsReceiver;
+    public Set<User> getRequestsSentTo() {
+        return requestsSentTo;
     }
 
-    public List<User> getUsersRequestedTo() {
-        return usersRequestedTo;
+    public void setRequestsSentTo(Set<User> requestsSentTo) {
+        this.requestsSentTo = requestsSentTo;
     }
 
-    public void setUsersRequestedTo(List<User> usersRequestedTo) {
-        this.usersRequestedTo = usersRequestedTo;
+    public void addRequestsSentTo(User user) {
+        this.requestsSentTo.add(user);
     }
 
-    public void addUsersRequestedTo(User user) {
-        this.usersRequestedTo.add(user);
-        System.out.println("added " + user.getUsername() + " to " + this.getUsername() + "'s pending list");
+    public Set<User> getRequestSenders() {
+        return requestSenders;
     }
 
-    public void removeUsersRequestedTo(User user) {
-        this.usersRequestedTo.remove(user);
+    public void setRequestSenders(Set<User> requestSenders) {
+        this.requestSenders = requestSenders;
     }
 
-    public User getRequestSender() {
-        return requestSender;
+    public Set<User> getAcceptedRequest() {
+        return acceptedRequest;
     }
 
-    public void setRequestSender(User requestSender) {
-        this.requestSender = requestSender;
+    public void setAcceptedRequest(Set<User> acceptedRequest) {
+        this.acceptedRequest = acceptedRequest;
     }
 
-    public List<User> getFriends() {
+    public Set<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<User> friends) {
+    public void setFriends(Set<User> friends) {
         this.friends = friends;
     }
 
-    public void addFriend(User user) {
-        this.friends.add(user);
-    }
-
-    public void removeFriend(User user) {
-        this.friends.remove(user);
-    }
 }

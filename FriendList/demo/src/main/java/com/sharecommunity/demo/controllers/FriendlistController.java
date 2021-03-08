@@ -1,6 +1,6 @@
 package com.sharecommunity.demo.controllers;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,6 +11,8 @@ import com.sharecommunity.demo.validators.UserValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -36,7 +38,7 @@ public class FriendlistController {
             return "redirect:/";
         }
         User me = userService.findUserById(isLoggedIn(session));
-        List<User> myRequestsPending = me.getUsersRequestedTo();
+        Set<User> myRequestsPending = me.getRequestsSentTo();
         model.addAttribute("me", me);
         model.addAttribute("myRequestsPending", myRequestsPending);
         model.addAttribute("allOtherUsers", userService.findAllOtherUsers(isLoggedIn(session)));
@@ -44,7 +46,7 @@ public class FriendlistController {
         return "friendlist/dashboard.jsp";
     }
 
-    @RequestMapping("/friendlist/{userId}/request")
+    @PostMapping("/friendlist/{userId}/request")
     public String requestFriend(HttpSession session, Model model, @PathVariable(value = "userId") Long userId) {
         if (isLoggedIn(session) == null) {
             return "redirect:/";
