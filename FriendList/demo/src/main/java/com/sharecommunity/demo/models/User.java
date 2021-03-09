@@ -195,7 +195,11 @@ public class User {
     }
 
     public void addRequestsReceivedFrom(User user) {
+        if (this.requestsReceivedFrom.contains(user)) {
+            System.out.println(user.getUsername() + " already sent a request to " + this.getUsername());
+        }
         this.requestsReceivedFrom.add(user);
+        System.out.println("added " + user.getUsername() + " to " + this.getUsername() + "'s pending list...");
     }
 
     public Set<User> getRequestReceivers() {
@@ -207,6 +211,10 @@ public class User {
     }
 
     public Set<User> getRequestsSentTo() {
+        System.out.println("Getting Requests Sent To...");
+        for (User requestee : this.requestsSentTo) {
+            System.out.println(requestee.getUsername());
+        }
         return requestsSentTo;
     }
 
@@ -215,7 +223,13 @@ public class User {
     }
 
     public void addRequestsSentTo(User user) {
-        this.requestsSentTo.add(user);
+        if (this.requestsSentTo.contains(user)) {
+            System.out.println(user.getUsername() + " already received an invite from " + this.getUsername());
+        }
+        Set<User> list = this.requestsSentTo;
+        list.add(user);
+        this.setRequestsSentTo(list);
+        // this.requestsSentTo.add(user);
     }
 
     public Set<User> getRequestSenders() {
@@ -240,6 +254,14 @@ public class User {
 
     public void setFriends(Set<User> friends) {
         this.friends = friends;
+    }
+
+    public void addFriends(User user) {
+        if (this.friends.contains(user)) {
+            System.out.println(user.getUsername() + " is already friends with " + this.getUsername());
+        }
+        this.friends.add(user);
+        System.out.println(user.getUsername() + " has been added as " + this.getUsername() + "'s friend");
     }
 
 }
